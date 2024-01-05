@@ -147,6 +147,15 @@ app.delete('/cancelBooking/:id', (req, res) => __awaiter(void 0, void 0, void 0,
         res.status(500).json({ message: 'Error deleting booking' });
     }
 }));
+app.delete('/deleteByFlightId/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield reservation_model_1.default.deleteMany({ flightId: req.params.id });
+        res.json({ message: 'Bookings deleted successfully', data: result });
+    }
+    catch (error) {
+        res.status(500).json({ message: 'Error deleting bookings' });
+    }
+}));
 app.put('/updateBooking', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const flightReservation = yield reservation_model_1.default.findByIdAndUpdate(req.body._id, req.body, { new: true });

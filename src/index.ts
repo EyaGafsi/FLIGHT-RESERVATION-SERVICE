@@ -150,6 +150,19 @@ app.delete('/cancelBooking/:id', async (req:any, res:any) => {
     res.status(500).json({ message: 'Error deleting booking' });
 }
 });
+
+
+app.delete('/deleteByFlightId/:id', async (req: any, res: any) => {
+  try {
+
+    const result = await FlightReservation.deleteMany({ flightId: req.params.id });
+
+    res.json({ message: 'Bookings deleted successfully', data: result });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting bookings' });
+  }
+});
+
 app.put('/updateBooking', async (req:any, res:any) => {
   try {
     
