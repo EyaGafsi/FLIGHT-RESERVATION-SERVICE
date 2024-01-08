@@ -48,7 +48,7 @@ mongoose.connect(uri, (err) => {
   else console.log("Mongo Database connected successfully");
 });
 
-app.post('/reserver', async (req:any, res:any) => {
+app.post('/reserver', keycloak.protect( 'realm:client' ), async (req:any, res:any) => {
   const {userId,flightId,nbAdults,nbChildren,type } = req.body;
 
   const newFlightBooking = new FlightReservation({
@@ -118,7 +118,7 @@ socket.on('connection', () => {
   console.log('Socket: client connected');
 });
 
-app.put('/refuse/:id', async (req:any, res:any) => {
+app.put('/refuse/:id', keycloak.protect( 'realm:admin' ), async (req:any, res:any) => {
   try {
     const bookingId = req.params.id;
 
@@ -142,7 +142,7 @@ app.put('/refuse/:id', async (req:any, res:any) => {
     res.status(500).json({ message: 'Error refusing Booking' });
 }
 });
-app.delete('/cancelBooking/:id', async (req:any, res:any) => {
+app.delete('/cancelBooking/:id', keycloak.protect( 'realm:client' ), async (req:any, res:any) => {
   try {
     const flightReservation = await FlightReservation.findByIdAndDelete(req.params.id);
     res.json({ message: 'Booking deleted successfully', data: flightReservation });
